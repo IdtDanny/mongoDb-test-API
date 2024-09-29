@@ -1,0 +1,73 @@
+01. Access the shell from terminal
+mongosh
+
+07. Inserting Documents
+    db.books.insertOne() // Insert one document
+    db.books.insertMany() // Inserting many documents
+
+08. Finding Documents
+db.books.find(); // For collection of books
+        find({});
+        findOne({})
+
+09. Sorting & Limiting Data
+db.books.find().count(); // Return the number of books collection
+        find().limit();
+        find().sort(); // if sort by 1: it's ascending, if sort by -1: it will be descending
+
+10. Nested Documents
+Document inside a Document
+
+11. Operators and Complex queries
+Operator starts with $ in mongodb
+ex: db.books.find({ratings: {$gt: 7}}) // returns all books with rating greater that 7
+    operators: > ($gt), < ($lt), >= ($gte) ...
+
+    db.books.find({$or: [{rating: 7}, {rating: 9}]}) // returns books with rating of 7 or 9
+
+12. Using $in & $nin (Querying Arrays)
+    i. $in = find all documents in range of sth 
+        ex: db.books.find({rating: {$in: [7, 8, 9]}}) // returns all books where ratings are in range of 7,8,9
+    
+    ii. $nin = opposite of $in
+        ex: db.books.find({rating: {$nin: [7, 8]}}) // returns all not in range of 7 and 8
+
+13. Querying Arrays
+ex: if you have array object like genres: ["magic", "fantasy"]
+    db.books.find({genres: "magic"}) // returns all books with magic in its genre object
+    db.books.find({genres: ["magic"]}) // returns all books with magic only in its genre
+    db.books.find({genres: {$all: ["magic", "fantasy"]}}) // returns all books with both magic and fantasy in its genre
+
+Note:
+    For nested documents
+    db.books.find({"reviews.name": "Danny"}) // returns documents of review inside the books documents where name is Danny
+
+14. Deleting Documents
+    db.books.deleteOne({_id: fsfsfsdf}) // delete document by Id property
+    db.books.deleteMany({author: "Terry"}) // deletes all documents by which author is Terry
+
+15. Updating Documents
+    db.books.updateOne({_id: sdfsfds}, {$set: {rating: 8}}) // Update the book based on whatever property you want - here we used id to update the corresponding document, its rating to 8
+    // using $set (operator)
+    // this update single document at a time
+
+    db.books.updateMany({author: "Terry"}, {$set: {author: "Idt"}}) // Update all documents with terry as author to Idt as author
+    
+    db.books.updateOne({_id: fsfsdfs}, {$inc: {pages: 2}}) // using operator $inc(increment) by 2, we can update the pages by increment them to 2
+
+    $push & $pull operator: they are used to update array objects
+    ex: genres: ["magic", "fantasy"]
+        db.books.updateOne({_id: sdssd}, {$pull: {genres: "fantasy"}}) // it will remove fantasy from genre array
+        db.books.updateOne({_id: sdssd}, {$push: {genres: "fantasy"}}) // it will add fantasy from genre array
+    
+    $each operator: used to update array objects by pushing more than one thing
+    ex: db.books.updateOne({_id: sdssd}, {$push: {genres: {$each: ["thriller", "action"]}}}) // it will add thriller and action to the array of genres
+
+16. MongoDB Drivers
+Drivers allow to communicate with mongoDB according to the application you're building ex node application or python application
+
+
+Indexes:
+ex: db.books.find({rating: 8}).explain('executionStats')
+    db.books.createIndex({ rating: 8 }) // creating index
+    db.books.dropIndex({ rating: 8 }) // deleting index
